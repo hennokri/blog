@@ -1,6 +1,11 @@
+//prepare tags array
+$_tags = get_all("SELECT * FROM post_tags NATURAL JOIN tag");
+foreach( $tags as $tags ){
+$this->tags[$tag['post_id']][[ = $tag ['tag_name'];
+}
 <?foreach( $posts as $post ):?>
     <?foreach ($tags[$post['post_id']]as $tag):?>
-        <a href="#"><span class="label" style="background-color: #5bc0de"><?=$tag?></span></a>
+        <a href="#"><span class="label" style="background-color: #5bc0de"><?=$tag['tag_name']?></span></a>
     <?endforeach?>
     <h1><a href="<?=BASE_URL?>posts/view/<?=$posts['posts_id']?>"><?=$post['post_subject']?></a></h1>
     <p><?=$post['post_text']?></p>
