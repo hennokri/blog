@@ -8,7 +8,7 @@
                 <button type="button" class="close" aria-hidden="true">×</button>
             </h1>
             <div class="post">
-                <img class="post-img" src="http://d.gr-assets.com/books/1358275334l/2767052.jpg" alt="The Hunger Games">
+                <img class="post-img" src="http://www.indyweek.com/imager/cool-john-ferguson-plays-at-the-west-village-courtyard/b/original/1319401/4569/cs_best_of_cool_john_01.jpg" alt="Kidramees">
 
                 <p>
                     <?=$post['post_text']?>
