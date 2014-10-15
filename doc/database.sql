@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Loomise aeg: Okt 15, 2014 kell 12:26 PM
+-- Loomise aeg: Okt 15, 2014 kell 01:10 PM
 -- Serveri versioon: 5.6.20
 -- PHP versioon: 5.5.15
 
@@ -23,11 +23,21 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `comment`;
 CREATE TABLE IF NOT EXISTS `comment` (
-  `Autor` int(11) NOT NULL,
-  `Sisesta tekst` int(11) NOT NULL,
-  `Kuupaev` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Kommentaar postitusele:......` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+`comment_id` int(10) unsigned NOT NULL,
+  `comment_author` varchar(255) NOT NULL,
+  `comment_text` text NOT NULL,
+  `comment_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `post_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Andmete tõmmistamine tabelile `comment`
+--
+
+INSERT INTO `comment` (`comment_id`, `comment_author`, `comment_text`, `comment_time`, `post_id`) VALUES
+(1, 'Henno', 'töötab', '2014-10-15 10:48:42', 2),
+(2, 'Henno', 'see kaa funkab', '2014-10-15 10:48:59', 3),
+(3, 'Henno', 'wololo', '2014-10-15 11:09:24', 1);
 
 -- --------------------------------------------------------
 
@@ -49,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `post` (
 --
 
 INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `user_id`) VALUES
-(1, '', '0', '2014-09-10 09:50:11', 1),
+(1, 'Veel üks', '0', '2014-09-10 09:50:11', 1),
 (2, 'posti teema', 'posti tekst', '2014-09-10 09:50:11', 1),
 (3, 'ksfhbs aofdjfb', 'aii apIFNF WSP ifopq fhsdjgf', '2014-10-13 08:12:20', 1);
 
@@ -61,8 +71,8 @@ INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `use
 
 DROP TABLE IF EXISTS `post_tags`;
 CREATE TABLE IF NOT EXISTS `post_tags` (
-  `post_id` int(10) unsigned NOT NULL,
-  `tag_id` int(10) unsigned NOT NULL
+  `post_id` int(11) unsigned NOT NULL,
+  `tag_id` int(11) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -70,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `post_tags` (
 --
 
 INSERT INTO `post_tags` (`post_id`, `tag_id`) VALUES
-(2, 1),
+(1, 1),
 (2, 2);
 
 -- --------------------------------------------------------
@@ -82,7 +92,7 @@ INSERT INTO `post_tags` (`post_id`, `tag_id`) VALUES
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE IF NOT EXISTS `tag` (
 `tag_id` int(10) unsigned NOT NULL,
-  `tag_name` varchar(255) NOT NULL
+  `tag_name` varchar(25) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
@@ -119,6 +129,12 @@ INSERT INTO `user` (`user_id`, `username`, `password`, `deleted`) VALUES
 --
 
 --
+-- Indeksid tabelile `comment`
+--
+ALTER TABLE `comment`
+ ADD PRIMARY KEY (`comment_id`), ADD KEY `post_id` (`post_id`);
+
+--
 -- Indeksid tabelile `post`
 --
 ALTER TABLE `post`
@@ -147,6 +163,11 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT tabelile `comment`
+--
+ALTER TABLE `comment`
+MODIFY `comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT tabelile `post`
 --
 ALTER TABLE `post`
@@ -170,13 +191,6 @@ MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 ALTER TABLE `post`
 ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
---
--- Piirangud tabelile `post_tags`
---
-ALTER TABLE `post_tags`
-ADD CONSTRAINT `post_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`),
-ADD CONSTRAINT `post_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
 
 --
 -- Piirangud tabelile `tag`
