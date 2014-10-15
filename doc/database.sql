@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Loomise aeg: Sept 22, 2014 kell 01:25 PM
+-- Loomise aeg: Okt 15, 2014 kell 12:26 PM
 -- Serveri versioon: 5.6.20
 -- PHP versioon: 5.5.15
 
@@ -18,6 +18,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabeli struktuur tabelile `comment`
+--
+
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE IF NOT EXISTS `comment` (
+  `Autor` int(11) NOT NULL,
+  `Sisesta tekst` int(11) NOT NULL,
+  `Kuupaev` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Kommentaar postitusele:......` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Tabeli struktuur tabelile `post`
 --
 
@@ -28,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   `post_text` text NOT NULL,
   `post_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Andmete tõmmistamine tabelile `post`
@@ -36,7 +50,28 @@ CREATE TABLE IF NOT EXISTS `post` (
 
 INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `user_id`) VALUES
 (1, '', '0', '2014-09-10 09:50:11', 1),
-(2, 'posti teema', 'posti tekst', '2014-09-10 09:50:11', 1);
+(2, 'posti teema', 'posti tekst', '2014-09-10 09:50:11', 1),
+(3, 'ksfhbs aofdjfb', 'aii apIFNF WSP ifopq fhsdjgf', '2014-10-13 08:12:20', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tabeli struktuur tabelile `post_tags`
+--
+
+DROP TABLE IF EXISTS `post_tags`;
+CREATE TABLE IF NOT EXISTS `post_tags` (
+  `post_id` int(10) unsigned NOT NULL,
+  `tag_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Andmete tõmmistamine tabelile `post_tags`
+--
+
+INSERT INTO `post_tags` (`post_id`, `tag_id`) VALUES
+(2, 1),
+(2, 2);
 
 -- --------------------------------------------------------
 
@@ -46,17 +81,17 @@ INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `use
 
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE IF NOT EXISTS `tag` (
-`tag id` int(10) unsigned NOT NULL,
-  `tag_name` varchar(25) NOT NULL
+`tag_id` int(10) unsigned NOT NULL,
+  `tag_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Andmete tõmmistamine tabelile `tag`
 --
 
-INSERT INTO `tag` (`tag id`, `tag_name`) VALUES
-(1, 'tagi nimi'),
-(2, 'tagi nimi2');
+INSERT INTO `tag` (`tag_id`, `tag_name`) VALUES
+(1, 'sthaaap'),
+(2, 'sumfing');
 
 -- --------------------------------------------------------
 
@@ -90,10 +125,16 @@ ALTER TABLE `post`
  ADD PRIMARY KEY (`post_id`), ADD KEY `user_id` (`user_id`);
 
 --
+-- Indeksid tabelile `post_tags`
+--
+ALTER TABLE `post_tags`
+ ADD PRIMARY KEY (`post_id`,`tag_id`), ADD KEY `tag_id` (`tag_id`);
+
+--
 -- Indeksid tabelile `tag`
 --
 ALTER TABLE `tag`
- ADD PRIMARY KEY (`tag id`);
+ ADD PRIMARY KEY (`tag_id`);
 
 --
 -- Indeksid tabelile `user`
@@ -109,12 +150,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT tabelile `post`
 --
 ALTER TABLE `post`
-MODIFY `post_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `post_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT tabelile `tag`
 --
 ALTER TABLE `tag`
-MODIFY `tag id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT tabelile `user`
 --
@@ -129,4 +170,17 @@ MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 ALTER TABLE `post`
 ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Piirangud tabelile `post_tags`
+--
+ALTER TABLE `post_tags`
+ADD CONSTRAINT `post_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`),
+ADD CONSTRAINT `post_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
+
+--
+-- Piirangud tabelile `tag`
+--
+ALTER TABLE `tag`
+ADD CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `post` (`post_id`);
 SET FOREIGN_KEY_CHECKS=1;
